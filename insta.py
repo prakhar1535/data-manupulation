@@ -33,30 +33,19 @@ def fetch_account_info(username):
         print(f"An error occurred: {e}")
         return None
 
-def is_fake_account(account_info):
-    if account_info is None:
-        return True, "Account not found or error fetching account info"
 
-    if account_info['followers'] / (account_info['following'] + 1) < 0.1:
-        return True, "Low follower to following ratio"
-
-    if not account_info['profile_picture'] or len(account_info['bio']) < 5:
-        return True, "Missing profile picture or generic bio"
-
-    if account_info['is_private']:
-        return True, "Private account"
-
-
-    return False, "Account appears genuine"
 
 if __name__ == "__main__":
-    username = input("Enter Instagram username: ")
-    account_info = fetch_account_info(username)
+    usernames = input("Enter Instagram usernames separated by commas: ").split(',')
+    usernames = [username.strip() for username in usernames]  # Strip any extra whitespace
 
-    if account_info:
-        print(f"Account Info: {json.dumps(account_info, indent=4)}")
-        is_fake, reason = is_fake_account(account_info)
-        print(f"Is the account fake? {is_fake}")
-        print(f"Reason: {reason}")
-    else:
-        print("Could not fetch account information.")
+    for username in usernames:
+        account_info = fetch_account_info(username)
+
+        if account_info:
+            print(f"Account Info for {username}: {json.dumps(account_info, indent=4)}")
+          
+            
+            
+        else:
+            print(f"Could not fetch account information for {username}.")
